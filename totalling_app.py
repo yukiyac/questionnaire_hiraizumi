@@ -2,11 +2,20 @@ import pandas as pd
 import csv, codecs
 from collections import Counter
 
-# coding: UTF-8
-df = open(u"questionnaire01.csv", 'r', encoding='utf-8')
+### 不要データを削除して再保存 ###
 
-respondents = csv.reader(df)
-header = next(csv.reader(df))
+# coding: UTF-8
+df = pd.read_csv("questionnaire01.csv")
+# 先頭列（タイムスタンプ列を削除して再保存)
+df.iloc[:, 1:].to_csv("questionnaire02.csv")
+
+
+### 再保存したcsvを読み込み、集計用データを作成 ###
+
+df2 = open(u"questionnaire02.csv", 'r', encoding='utf-8')
+
+respondents = csv.reader(df2)
+header = next(csv.reader(df2))
 
 # カウンター定義
 cnt = Counter()
@@ -22,7 +31,7 @@ for respondent in respondents:
 
 
 # csv書き込み
-ff = codecs.open("totalling01.csv", mode='w', encoding='utf-8')
+ff = codecs.open("totalling01.csv", mode='w', encoding='shift_jis')
 csvWriter = csv.writer(ff)
 
 for i in range(len(cnt)):
